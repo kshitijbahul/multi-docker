@@ -1,0 +1,19 @@
+sudo: required
+services:
+    - docker
+before_install:
+    - docker build -t kshitijbahul/reacttest -f ./client/Dockerfile.dev ./client
+script:
+    - docker run -e CI=true kshitijbahul/reacttest npm run test
+after_success:
+    - docker build -t kshitijbahul/multi-client ./client
+    - docker build -t kshitijbahul/multi-nginx ./nginx
+    - docker build -t kshitijbahul/multi-server ./server
+    - docker build -t kshitijbahul/multi-worker ./worker
+    # login to docker cli
+    - echo "DOCKER_PASSWORD"| docker login -u "$DOCKER_ID" --password-stdin
+    #take images and push to docker cli
+    - docker push kshitijbahul/multi-client
+    - docker push kshitijbahul/multi-nginx
+    - docker push kshitijbahul/multi-server
+    - docker push kshitijbahul/multi-worker
