@@ -21,7 +21,7 @@ spec:
                     - name: REDIS_HOST
                       value: redis-cluster-ip-service
                     - name: REDIS_PORT
-                      value: 6379
+                      value: '6379'
                     - name: PGUSER
                       value: postgres
                     - name: PGHOST
@@ -29,5 +29,14 @@ spec:
                     - name: PGDATABASE
                       value: postgres
                     - name: PGPORT
-                      value: 5432
+                      value: '5432'
+                    - name: PGPASSWORD #env variable used in the server config.js
+                      # Reading from the secret
+                      valueFrom: 
+                        # use value form env variable
+                        secretKeyRef:
+                            # name of the secret 
+                            name: pgpassword
+                            # key stored in the secret, a secret can have multiple key value pairs
+                            key: PGPASSWORD
             

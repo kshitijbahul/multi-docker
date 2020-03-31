@@ -30,3 +30,9 @@ spec:
                       mountPath: /var/lib/postgresql/data
                       # only for postgres: to make it put data in the folder postgres in pvc
                       subPath: postgres
+                  env:
+                    - name: POSTGRES_PASSWORD
+                      valueFrom:
+                        secretKeyRef:
+                          name: pgpassword
+                          key: PGPASSWORD
