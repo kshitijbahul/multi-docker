@@ -12,8 +12,21 @@ spec:
             labels:
                 component: postgres
         spec:
+            #ask k8 for the volumes that we need from PVC
+            volumes:
+                - name: postgres-storage
+                  persistentVolumeClaim:
+                    #name of the PVC we created
+                    claimName: database-persistent-volume-claim
             containers:
                 - name: postgres
                   image: postgres
                   ports:
                     - containerPort: 5432
+                  volumeMounts:
+                    #same name as the one we asked k8 for in the volume tag above
+                    - name: postgres-storage
+                      # data form the following path to be replicated into the persistant volume
+                      mountPath: /var/lib/postgresql/data
+                      # only for postgres: to make it put data in the folder postgres in pvc
+                      subPath: postgres
