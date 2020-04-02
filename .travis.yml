@@ -20,7 +20,7 @@ before_install:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     - docker build -t kshitijbahul/react-test -f ./client/Dockerfile.dev ./client
 script:
-    - docker run -eCI=true kshitijbahul/react-test npm test
+    - docker run -e CI=true kshitijbahul/react-test npm test
 deploy:
     # Tells Travis to run the script file
     provider: script
