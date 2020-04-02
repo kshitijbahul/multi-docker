@@ -17,7 +17,7 @@ before_install:
     - gcloud config set project kubernetes-cluster-multi-image
     - gcloud config set compute/zone asia-south1-a
     - gcloud container clusters get-credentials multi-cluster
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     - docker build -t kshitijbanhul/react-test -f ./client/Dockerfile.dev ./client
 script:
     - docker -env CI=true  run kshitijbanhul/react-test npm test
