@@ -1,0 +1,29 @@
+sudo: required
+services:
+    - docker
+env:
+    global:
+        # to get sha for the latest commit
+        - SHA=$(git rev-parse HEAD)
+        - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+before_install:
+    - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service-account.json.enc -out service-account.json -d
+    # download google cloud and install
+    - curl https://sdk.cloud.google.com | bash > /dev/null;
+    # Initail Config for source
+    - source $HOME/google-cloud-sdk/path.bach.inc
+    - gcloud components update kubectl
+    - gcloud auth activate-service-account --key-file service-account.json
+    - gcloud config set project kubernetes-cluster-multi-image
+    - gcloud config set compute/zone asia-south1-a
+    - gcloud container clusters get-credentials multi-cluster
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t kshitijbanhul/react-test -f ./client/Dockerfile.dev ./client
+script:
+    - docker -env CI=true  run kshitijbanhul/react-test npm test
+deploy:
+    # Tells Travis to run the script file
+    provider: script
+    script: bash ./deploy.sh
+    on: 
+        branch: master
