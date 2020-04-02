@@ -11,7 +11,7 @@ before_install:
     # download google cloud and install
     - curl https://sdk.cloud.google.com | bash > /dev/null;
     # Initail Config for source
-    - source $HOME/google-cloud-sdk/path.bach.inc
+    - source $HOME/google-cloud-sdk/path.bash.inc
     - gcloud components update kubectl
     - gcloud auth activate-service-account --key-file service-account.json
     - gcloud config set project kubernetes-cluster-multi-image
